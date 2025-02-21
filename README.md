@@ -1,1 +1,1 @@
-# ter_homework
+Repository for Netology Terraform homework
