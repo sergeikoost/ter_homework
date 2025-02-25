@@ -56,7 +56,7 @@
 
 В качестве ответа приложите: исправленный фрагмент кода и вывод команды docker ps:
 
-'''
+```
 resource "docker_image" "nginx" {
   name         = "nginx:latest"
   keep_locally = true
@@ -71,7 +71,7 @@ resource "docker_container" "nginx" {
     external = 9090
   }
 }
-'''
+```
 
 ![terraform_homework1-task1 7](https://github.com/user-attachments/assets/a95a8ca7-53c3-4a73-a5a1-39ecbff2954a)
 
