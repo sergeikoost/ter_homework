@@ -54,7 +54,26 @@
 ![terraform_homework1-task1 5](https://github.com/user-attachments/assets/4e74a09d-6e41-4dc8-839b-002c61f0478f)
 
 
+В качестве ответа приложите: исправленный фрагмент кода и вывод команды docker ps:
 
+~~
+resource "docker_image" "nginx" {
+  name         = "nginx:latest"
+  keep_locally = true
+}
+
+resource "docker_container" "nginx" {
+  image = docker_image.nginx.image_id
+  name  = "example_${random_password.random_string.result}"
+
+  ports {
+    internal = 80
+    external = 9090
+  }
+}
+~~
+
+![terraform_homework1-task1 7](https://github.com/user-attachments/assets/a95a8ca7-53c3-4a73-a5a1-39ecbff2954a)
 
 
 
