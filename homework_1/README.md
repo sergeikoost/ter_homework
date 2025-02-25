@@ -75,5 +75,35 @@ resource "docker_container" "nginx" {
 
 ![terraform_homework1-task1 7](https://github.com/user-attachments/assets/a95a8ca7-53c3-4a73-a5a1-39ecbff2954a)
 
+5) Замените имя docker-контейнера в блоке кода на hello_world. Не перепутайте имя контейнера и имя образа. Мы всё ещё продолжаем использовать name = "nginx:latest". Выполните команду terraform apply -auto-approve. Объясните своими словами, в чём может быть опасность применения ключа -auto-approve. Догадайтесь или нагуглите зачем может пригодиться данный ключ? В качестве ответа дополнительно приложите вывод команды docker ps.
+
+Меняем строчку в коде:
+
+```
+resource "docker_container" "nginx" {
+  image = docker_image.nginx.image_id
+  name  = "hello_world" # name  = "example_${random_password.random_string.result}" изменен на  "hello_world"
+```
+Делаем terraform apply -auto-approve:
+
+![terraform_homework1-task1 8](https://github.com/user-attachments/assets/43026e79-81ad-4a3a-8e06-e7045393e319)
+
+![terraform_homework1-task1 9](https://github.com/user-attachments/assets/18a9f4b1-fea4-43ca-88a8-b946db4cfb7b)
+
+И после сносим все что сделали командой terraform destroy -auto-approve:
+
+![terraform_homework1-task1 10](https://github.com/user-attachments/assets/747a94b0-efdc-46e9-8b5b-d511965c66ea)
+
+![terraform_homework1-task1 11](https://github.com/user-attachments/assets/36c461ea-e4fc-4f72-b8ef-60b9d079b116)
 
 
+docker image не уничтожился из-за строчки в main.tf которая указывает, что образ надо хранить локально и не удалять его после уничтожения ресурсов:
+
+```
+resource "docker_image" "nginx" {
+  name         = "nginx:latest" 
+  keep_locally = true #локально, не удаляем после уничтожения ресурсов terraform
+}
+```
+
+keep_locally  If true, then the Docker image won't be deleted on destroy operation. If this is false, it will delete the image from the Docker local storage on destroy operation.
