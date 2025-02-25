@@ -29,3 +29,32 @@
 Ресурс random_password.random_string. Внутри этого ресурса будет ключ result, содержащий сгенерированный пароль:
 
 ![terraform_homework1-task1 3](https://github.com/user-attachments/assets/c244c9fe-827e-4f3e-8efa-0916834c59cf)
+
+
+4) Раскомментируйте блок кода, примерно расположенный на строчках 29–42 файла main.tf. Выполните команду terraform validate. Объясните, в чём заключаются намеренно допущенные ошибки. Исправьте их.
+
+![terraform_homework1-task1 4](https://github.com/user-attachments/assets/cc5d5ecd-ec6b-4d06-b18b-401ce9187f9b)
+
+
+В целом из ошибки все видно и терраформ явно указывает как её исправить.
+
+В Terraform каждый ресурс должен иметь два идентификатора (метки), тип ресурса (например, docker_image), имя ресурса (уникальное имя, которое вы задаете для этого ресурса). 
+
+Нарушены правила именования, имя ресурса не может начинаться с буквы или спец. символа "_" и должно содержать только буквы, цифры, подчеркивания и дефисы. 
+
+Также допущена ошибка в ссылке на ресурс "name  = "example_${random_password.random_string_FAKE.resulT}"
+
+Имя ресурса random_string_FAKE не соответствует реальному имени ресурса (random_string) и в ключе result T  - большая.
+
+
+Исправляем в main.tf ошибки и выполняем код:
+
+![terraform_homework1-task1 6](https://github.com/user-attachments/assets/c2fe3c8a-006a-4ec6-bbd3-03b7ed74d403)
+
+![terraform_homework1-task1 5](https://github.com/user-attachments/assets/4e74a09d-6e41-4dc8-839b-002c61f0478f)
+
+
+
+
+
+
