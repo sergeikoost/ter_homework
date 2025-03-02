@@ -215,3 +215,7 @@ Error: Invalid provider registry host
 7) Выходим и делаем terraform remove:
 
 ![tf_homework2_task1 2 destroy](https://github.com/user-attachments/assets/b14c6e7d-79fe-4ddf-848c-a706b6b6ca05)
+
+
+P.S.
+При выполнении задания отчего-то старая виртуалка, на которой делались все предыдущие задания, висла намертво и ничего кроме ребута ей не помогало, разобраться не вышло. Создал новую и с неё уже делал задачи.
