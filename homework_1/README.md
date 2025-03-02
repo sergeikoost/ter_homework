@@ -112,17 +112,12 @@ keep_locally  If true, then the Docker image won't be deleted on destroy operati
 # Задание 2
 
 
-Создайте в облаке ВМ. Сделайте это через web-консоль, чтобы не слить по незнанию токен от облака в github(это тема следующей лекции). Если хотите - попробуйте сделать это через terraform, прочитав документацию yandex cloud. Используйте файл personal.auto.tfvars и гитигнор или иной, безопасный способ передачи токена!
-Подключитесь к ВМ по ssh и установите стек docker.
-Найдите в документации docker provider способ настроить подключение terraform на вашей рабочей станции к remote docker context вашей ВМ через ssh.
-
-
-Создал хост, установил стек docker, создал пару ключей без пароля для доступа с хостовой машины на удаленную по ssh. Дал доступ к docker daemon-у для удаленного пользователя sudo usermod -aG docker kusk111serj чтобы этот пользователь мог выполнять команды docker cli без sudo.
+1) Создал хост, установил стек docker, создал пару ключей без пароля для доступа с хостовой машины на удаленную по ssh. Дал доступ к docker daemon-у для удаленного пользователя sudo usermod -aG docker kusk111serj чтобы этот пользователь мог выполнять команды docker cli без sudo.
 
 В документации Terraform провайдера Docker указано, что для подключения к удалённому Docker-хосту через SSH можно использовать параметр host с указанием SSH-соединения.
 
 
-Создал файл main.tf:
+2) Создал файл main.tf:
 
 ```
 terraform { #  Terraform загружает провайдеры docker и random
@@ -183,8 +178,17 @@ resource "docker_container" "mysql" { # Создаем докер контейн
   }
 }
 ```
+3) Создал файл .gitignore чтобы не передать секреты куда не надо:
 
-Подкорректировал файл nano ~/.terraformrc указав provider_installation network_mirror для того чтобы при попытке инициализации не видеть ошибку:
+```
+*.tfstate
+*.tfstate.*
+personal.auto.tfvars
+.terraform/
+```
+
+
+4) Подкорректировал файл nano ~/.terraformrc указав provider_installation network_mirror для того чтобы при попытке инициализации не видеть ошибку:
 
 ```
 Error: Invalid provider registry host
@@ -198,16 +202,16 @@ Error: Invalid provider registry host
 
 ```
 
-Даем комманду terraforom init, после terraform aplly:
+5) Даем комманду terraforom init, после terraform aplly:
 
 ![tf_homework2_task1 2 apply](https://github.com/user-attachments/assets/deedb47c-3f01-45f0-a878-d9d0313adb27)
 
 
-Видим что все прошло успешно, подключаемся к удаленному хосту по ssh и проверяем что все корректно:
+6) Видим что все прошло успешно, подключаемся к удаленному хосту по ssh и проверяем что все корректно:
 
 ![tf_homework2_task1 2 1](https://github.com/user-attachments/assets/02026ea5-1e4b-4a58-8bbc-5421bbf802eb)
 
 
-Выходим и делаем terraform remove:
+7) Выходим и делаем terraform remove:
 
 ![tf_homework2_task1 2 destroy](https://github.com/user-attachments/assets/b14c6e7d-79fe-4ddf-848c-a706b6b6ca05)
