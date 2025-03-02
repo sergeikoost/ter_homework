@@ -107,3 +107,107 @@ resource "docker_image" "nginx" {
 ```
 
 keep_locally  If true, then the Docker image won't be deleted on destroy operation. If this is false, it will delete the image from the Docker local storage on destroy operation.
+
+
+# Задание 2
+
+
+Создайте в облаке ВМ. Сделайте это через web-консоль, чтобы не слить по незнанию токен от облака в github(это тема следующей лекции). Если хотите - попробуйте сделать это через terraform, прочитав документацию yandex cloud. Используйте файл personal.auto.tfvars и гитигнор или иной, безопасный способ передачи токена!
+Подключитесь к ВМ по ssh и установите стек docker.
+Найдите в документации docker provider способ настроить подключение terraform на вашей рабочей станции к remote docker context вашей ВМ через ssh.
+
+
+Создал хост, установил стек docker, создал пару ключей без пароля для доступа с хостовой машины на удаленную по ssh. Дал доступ к docker daemon-у для удаленного пользователя sudo usermod -aG docker kusk111serj чтобы этот пользователь мог выполнять команды docker cli без sudo.
+
+В документации Terraform провайдера Docker указано, что для подключения к удалённому Docker-хосту через SSH можно использовать параметр host с указанием SSH-соединения.
+
+
+Создал файл main.tf:
+
+```
+terraform { #  Terraform загружает провайдеры docker и random
+  required_providers { 
+    docker = {
+      source  = "kreuzwerker/docker"
+      version = "~> 3.0.1"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.5.1"
+    }
+  }
+}
+
+provider "docker" { # Настраиваем подключение к Docker Daemon на удалённой машине через ssh
+  host = "ssh://kusk111serj@158.160.71.175:22"
+}
+
+provider "random" {} # Инициализирует провайдер random, нужен для генерации случайных чисел, обязательно для задания
+
+resource "random_password" "root_password" { # Генерируем случайные числа для пароля для рута и wordpress юзеров mysql
+  length      = 16
+  special     = false
+  min_upper   = 1
+  min_lower   = 1
+  min_numeric = 1
+}
+
+resource "random_password" "user_password" {
+  length      = 16
+  special     = false
+  min_upper   = 1
+  min_lower   = 1
+  min_numeric = 1
+}
+
+resource "docker_image" "mysql" { # Ресурс docker_image управляет образом, который будет использоваться для создания контейнера, скачиваем mysql образ
+  name = "mysql:8"
+}
+
+resource "docker_container" "mysql" { # Создаем докер контейнер из образа который скачали выше выполняя инструкцию задачи (порты, окружение и т.д.)
+  image = docker_image.mysql.image_id
+  name  = "mysql_container"
+
+  env = [
+    "MYSQL_ROOT_PASSWORD=${random_password.root_password.result}",
+    "MYSQL_DATABASE=wordpress",
+    "MYSQL_USER=wordpress",
+    "MYSQL_PASSWORD=${random_password.user_password.result}",
+    "MYSQL_ROOT_HOST=%"
+  ]
+
+  ports {
+    internal = 3306
+    external = 3306
+    ip       = "127.0.0.1"
+  }
+}
+```
+
+Подкорректировал файл nano ~/.terraformrc указав provider_installation network_mirror для того чтобы при попытке инициализации не видеть ошибку:
+
+```
+Error: Invalid provider registry host
+│ 
+│ The host "registry.terraform.io" given in provider source address "registry.terraform.io/hashicorp/random" does not offer a Terraform provider registry.
+╵
+╷
+│ Error: Invalid provider registry host
+│ 
+│ The host "registry.terraform.io" given in provider source address "registry.terraform.io/kreuzwerker/docker" does not offer a Terraform provider registry.
+
+```
+
+Даем комманду terraforom init, после terraform aplly:
+
+![tf_homework2_task1 2 apply](https://github.com/user-attachments/assets/deedb47c-3f01-45f0-a878-d9d0313adb27)
+
+
+Видим что все прошло успешно, подключаемся к удаленному хосту по ssh и проверяем что все корректно:
+
+![tf_homework2_task1 2 1](https://github.com/user-attachments/assets/02026ea5-1e4b-4a58-8bbc-5421bbf802eb)
+
+
+Выходим и делаем terraform remove:
+
+![tf_homework2_task1 2 destroy](https://github.com/user-attachments/assets/b14c6e7d-79fe-4ddf-848c-a706b6b6ca05)
