@@ -46,4 +46,22 @@ resource "yandex_compute_instance" "platform" {
   platform_id = "standard-v4"
 ```
 
-В официальной документации yandex.cloud нет пплатформы v4, исправляем на v3. Также исправляем аргумент core_fraction и сore потому что  "the specified core fraction is not available on platform "standard-v3"; allowed core fractions: 20, 50, 100", делаем 20 core_fraction и 2 core
+В официальной документации yandex.cloud нет пплатформы v4, исправляем на v3. Также исправляем аргумент core_fraction и сore потому что  "the specified core fraction is not available on platform "standard-v3"; allowed core fractions: 20, 50, 100", делаем 20 core_fraction и 2 core.
+
+
+Инициализируем проект со всеми исправлениями:
+
+![terraform_homework2-task1 2](https://github.com/user-attachments/assets/845e4032-9865-4ab2-bc12-5115fb3263dc)
+
+
+Проверяем что виртуалка создалась, все прошло успешно:
+
+![terraform_homework2-task1 3](https://github.com/user-attachments/assets/21784b72-cefb-4813-8d14-1089389c2560)
+
+
+Подключаемся к новой машине по ssh и даем команду curl ifconfig.me:
+
+![terraform_homework2-task1 4](https://github.com/user-attachments/assets/276fca10-cace-4777-aafc-f60fb4f676c0)
+
+
+
