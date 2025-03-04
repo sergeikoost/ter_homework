@@ -65,7 +65,7 @@ resource "yandex_compute_instance" "platform" {
 
 
 
-№ Задача 2 
+# Задача 2 
 
 Замените все хардкод-значения для ресурсов yandex_compute_image и yandex_compute_instance на отдельные переменные. К названиям переменных ВМ добавьте в начало префикс vm_web_ . Пример: vm_web_name.
 
