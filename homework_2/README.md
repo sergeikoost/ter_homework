@@ -37,3 +37,13 @@ yc resource-manager folder add-access-binding b1gjbscn2p28l9st4t7e --role editor
 metadata = {
     serial-port-enable = "1"
 ```
+
+3-ая ошибка: 
+
+```
+resource "yandex_compute_instance" "platform" {
+  name        = "netology-develop-platform-web"
+  platform_id = "standard-v4"
+```
+
+В официальной документации yandex.cloud нет пплатформы v4, исправляем на v3. Также исправляем аргумент core_fraction и сore потому что  "the specified core fraction is not available on platform "standard-v3"; allowed core fractions: 20, 50, 100", делаем 20 core_fraction и 2 core
