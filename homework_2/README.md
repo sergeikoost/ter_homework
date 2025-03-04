@@ -170,3 +170,175 @@ terraform plan:
 
 ![terraform_homework2-task2 1](https://github.com/user-attachments/assets/2cbf73de-dceb-4104-a23a-5346178292fe)
 
+
+# Задача 3
+
+Создал файл vms_platform.tf, перенес в него переменные из первой ВМ и сделал переменные для второй, в файле variables.tf закомментировал все переменные с 1-ой ВМ чтобы не было конфликтов:
+
+```
+# Переменные для первой виртуалки  (web)
+
+variable "vms_ssh_root_key" {
+  type        = string
+  default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINJi2NOa0VHfHpjpfue1i/mlrbVpr898SDMajPes16gt root@ubuntulearn"
+  description = "ssh-keygen -t ed25519"
+}
+variable "vm_web_image_family" {
+  type        = string
+  default     = "ubuntu-2004-lts"
+}
+
+variable "vm_web_name" {
+  type        = string
+  default     = "netology-develop-platform-web"
+}
+
+variable "vm_web_platform_id" {
+  type        = string
+  default     = "standard-v3"
+}
+
+variable "vm_web_cores" {
+  type        = number
+  default     = 2
+}
+
+variable "vm_web_memory" {
+  type        = number
+  default     = 1
+}
+
+variable "vm_web_core_fraction" {
+  type        = number
+  default     = 20
+}
+
+variable "vm_web_preemptible" {
+  type        = bool
+  default     = true
+}
+
+variable "vm_web_nat" {
+  type        = bool
+  default     = true
+}
+
+variable "vm_web_serial_port_enable" {
+  type        = string
+  default     = "1"
+}
+
+# Переменные для второй VM (db)
+
+#variable "vms_ssh_root_key" {
+ # type        = string
+  #default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINJi2NOa0VHfHpjpfue1i/mlrbVpr898SDMajPes16gt root@ubuntulearn"
+  #description = "ssh-keygen -t ed25519"
+#}
+variable "vm_db_image_family" {
+  type        = string
+  default     = "ubuntu-2004-lts"
+}
+
+variable "vm_db_name" {
+  type        = string
+  default     = "netology-develop-platform-db"
+}
+
+variable "vm_db_platform_id" {
+  type        = string
+  default     = "standard-v3"
+}
+
+variable "vm_db_cores" {
+  type        = number
+  default     = 2
+}
+
+variable "vm_db_memory" {
+  type        = number
+  default     = 2
+}
+
+variable "vm_db_core_fraction" {
+  type        = number
+  default     = 20
+}
+
+variable "vm_db_preemptible" {
+  type        = bool
+  default     = true
+}
+
+variable "vm_db_nat" {
+  type        = bool
+  default     = true
+}
+
+variable "vm_db_serial_port_enable" {
+  type        = string
+  default     = "1"
+}
+
+variable "vm_db_zone" {
+  type        = string
+  default     = "ru-central1-b"
+}
+
+```
+
+
+В файл main.tf добавил 2 ресурса для второй ВМ:
+
+1) resource "yandex_vpc_subnet" "develop_b" т.к. указно было сделать что вторая вм должна работать в зоне "ru-central1-b"
+
+
+```
+resource "yandex_vpc_subnet" "develop_b" {
+  name           = "${var.vpc_name}-b"
+  zone           = "ru-central1-b"
+  network_id     = yandex_vpc_network.develop.id
+  v4_cidr_blocks = ["10.0.2.0/24"]
+}
+```
+
+2) resource "yandex_compute_instance" "platform_db" для второй ВМ
+
+```
+resource "yandex_compute_instance" "platform_db" {
+  name        = var.vm_db_name
+  platform_id = var.vm_db_platform_id
+  zone        = var.vm_db_zone
+  resources {
+    cores         = var.vm_db_cores
+    memory        = var.vm_db_memory
+    core_fraction = var.vm_db_core_fraction
+  }
+  boot_disk {
+    initialize_params {
+      image_id = data.yandex_compute_image.ubuntu.image_id
+    }
+  }
+  scheduling_policy {
+    preemptible = var.vm_db_preemptible
+  }
+  network_interface {
+    subnet_id = yandex_vpc_subnet.develop_b.id
+    nat       = var.vm_db_nat
+  }
+
+  metadata = {
+    serial-port-enable = var.vm_db_serial_port_enable
+    ssh-keys           = "ubuntu:${var.vms_ssh_root_key}"
+  }
+}
+```
+
+Terraform apply:
+
+![terraform_homework2-task2 2](https://github.com/user-attachments/assets/a15631b7-36d0-43e2-be18-7ebeb5e860f8)
+
+Создалось 2 вм:
+
+![terraform_homework2-task2 3](https://github.com/user-attachments/assets/d17e45ba-676f-43e1-b9d2-e7cfd49c5bf9)
+
