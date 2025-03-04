@@ -26,4 +26,3 @@ yc resource-manager folder add-access-binding b1gjbscn2p28l9st4t7e --role editor
 ```
 ![terraform_homework2-task1 1](https://github.com/user-attachments/assets/cc3afd82-aed5-4320-8b8c-db6e3dbdd400)
 
-yc resource-manager folder add-access-binding b1gjbscn2p28l9st4t7e --role editor --subject serviceAccount:ajec7nr43f2ee9108mnf
