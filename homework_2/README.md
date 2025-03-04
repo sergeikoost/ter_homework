@@ -29,6 +29,8 @@ yc resource-manager folder add-access-binding b1gjbscn2p28l9st4t7e --role editor
 Исправляем ошибки в main.tf
 
 1-ая ошибка: в блоке resource "yandex_compute_instance" "platform" написано platform_id = "standart-v4" , надо "standard-v4", просто неверно написано слово.
+
+
 2-ая ошибка: ключ serial-port-enable должен быть строкой, а не числом, исправляем 
 
 ```
