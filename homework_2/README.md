@@ -372,8 +372,6 @@ terraform output:
 
 ![terraform_homework2-task2 5](https://github.com/user-attachments/assets/78fc14c7-20cc-4c6b-9220-fc061d50e195)
 
-![terraform_homework2-task1 3](https://github.com/user-attachments/assets/55435765-f387-4f1b-8309-2a66c99fd9ff)
-![terraform_homework2-task2 7](https://github.com/user-attachments/assets/827788f0-0fc0-41e2-82df-86f09dc7fac8)
 
 # Задача 5
 
