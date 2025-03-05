@@ -342,3 +342,42 @@ Terraform apply:
 
 ![terraform_homework2-task2 3](https://github.com/user-attachments/assets/d17e45ba-676f-43e1-b9d2-e7cfd49c5bf9)
 
+
+# Задача 4
+
+Объявляю в файле ouputs.tf один output для 2 вм, web и db:
+
+```
+output "vm_web_info" {
+  description = "Информация о вм с web"
+  value = {
+    instance_name = yandex_compute_instance.platform.name  # Исправлено на platform
+    external_ip   = yandex_compute_instance.platform.network_interface[0].nat_ip_address
+    fqdn          = yandex_compute_instance.platform.fqdn
+  }
+}
+
+output "vm_db_info" {
+  description = "Информация о вм с db"
+  value = {
+    instance_name = yandex_compute_instance.platform_db.name
+    external_ip   = yandex_compute_instance.platform_db.network_interface[0].nat_ip_address
+    fqdn          = yandex_compute_instance.platform_db.fqdn
+  }
+}
+```
+
+terraform output:
+
+root@ubuntulearn:/home/ter-homeworks/02/src# terraform output
+vm_db_info = {
+  "external_ip" = "89.169.166.135"
+  "fqdn" = "epdvnlc1hrenhfpf8os0.auto.internal"
+  "instance_name" = "netology-develop-platform-db"
+}
+vm_web_info = {
+  "external_ip" = "158.160.63.92"
+  "fqdn" = "fhmgnrgk59bd2ueqslln.auto.internal"
+  "instance_name" = "netology-develop-platform-web"
+}
+
