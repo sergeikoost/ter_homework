@@ -369,15 +369,39 @@ output "vm_db_info" {
 
 terraform output:
 
-root@ubuntulearn:/home/ter-homeworks/02/src# terraform output
-vm_db_info = {
-  "external_ip" = "89.169.166.135"
-  "fqdn" = "epdvnlc1hrenhfpf8os0.auto.internal"
-  "instance_name" = "netology-develop-platform-db"
-}
-vm_web_info = {
-  "external_ip" = "158.160.63.92"
-  "fqdn" = "fhmgnrgk59bd2ueqslln.auto.internal"
-  "instance_name" = "netology-develop-platform-web"
-}
 
+![terraform_homework2-task2 5](https://github.com/user-attachments/assets/78fc14c7-20cc-4c6b-9220-fc061d50e195)
+
+![terraform_homework2-task1 3](https://github.com/user-attachments/assets/55435765-f387-4f1b-8309-2a66c99fd9ff)
+![terraform_homework2-task2 7](https://github.com/user-attachments/assets/827788f0-0fc0-41e2-82df-86f09dc7fac8)
+
+# Задача 5
+
+Файл locals.tf:
+
+```
+locals {
+  # Имя для первой ВМ (web)
+  vm_web_name = "${var.vm_web_name}-${var.default_zone}-${var.vm_web_platform_id}"
+
+  # Имя для второй ВМ (db)
+  vm_db_name  = "${var.vm_db_name}-${var.vm_db_zone}-${var.vm_db_platform_id}"
+}
+```
+
+
+В файле main.tf изменил 2 строчки чтобы терраформ использовал local переменную:
+
+
+```
+resource "yandex_compute_instance" "platform" {
+  name        = local.vm_web_name
+resource "yandex_compute_instance" "platform_db" {
+  name        = local.vm_db_name  
+```
+Теперь вывод output формируется на основе переменных в locals.tf
+
+![terraform_homework2-task2 8](https://github.com/user-attachments/assets/621f3ccc-bc0b-41c0-aad5-e6ebcd223a99)
+
+
+# Задача 6
