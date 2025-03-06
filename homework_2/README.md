@@ -399,3 +399,132 @@ resource "yandex_compute_instance" "platform_db" {
 
 
 # Задача 6
+
+Объединяем переменные для ресурсов виртуалок в 1-ну переменную:
+
+
+```
+variable "vms_resources" {
+  type = map(object({
+    cores         = number
+    memory        = number
+    core_fraction = number
+    hdd_size      = number
+    hdd_type      = string
+  }))
+}
+```
+
+И общую переменную для метаданных:
+
+```
+variable "metadata" {
+  type = map(string)
+}
+```
+
+Создаю отдельный файл terraform.tfvars чтобы внести туда значения перменных, иначе у меня не вышло:
+
+
+```
+vms_resources = {
+  web = {
+    cores         = 1
+    memory        = 2
+    core_fraction = 20
+    hdd_size      = 10
+    hdd_type      = "network-hdd"
+  },
+  db = {
+    cores         = 1
+    memory        = 2
+    core_fraction = 20
+    hdd_size      = 10
+    hdd_type      = "network-hdd"
+  }
+}
+
+metadata = {
+  serial-port-enable = "1"
+  ssh-keys           = "ubuntu:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINJi2NOa0VHfHpjpfue1i/mlrbVpr898SDMajPes16gt root@ubuntulearn"
+}
+
+```
+
+Также необходимо обновить файл main.tf чтобы терраформ использовал новые переменные:
+
+web вм:
+
+```
+resource "yandex_compute_instance" "platform" {
+  name        = local.vm_web_name
+  platform_id = var.vm_web_platform_id
+  zone        = var.default_zone
+
+  resources {
+    cores         = var.vms_resources["web"].cores
+    memory        = var.vms_resources["web"].memory
+    core_fraction = var.vms_resources["web"].core_fraction
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = data.yandex_compute_image.ubuntu.image_id
+      size     = var.vms_resources["web"].hdd_size
+      type     = var.vms_resources["web"].hdd_type
+    }
+  }
+
+  scheduling_policy {
+    preemptible = var.vm_web_preemptible
+  }
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.develop.id
+    nat       = var.vm_web_nat
+  }
+
+  metadata = var.metadata
+}
+```
+
+db вм:
+
+```
+resource "yandex_compute_instance" "platform_db" {
+  name        = local.vm_db_name
+  platform_id = var.vm_db_platform_id
+  zone        = var.vm_db_zone
+
+  resources {
+    cores         = var.vms_resources["db"].cores
+    memory        = var.vms_resources["db"].memory
+    core_fraction = var.vms_resources["db"].core_fraction
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = data.yandex_compute_image.ubuntu.image_id
+      size     = var.vms_resources["db"].hdd_size
+      type     = var.vms_resources["db"].hdd_type
+    }
+  }
+
+  scheduling_policy {
+    preemptible = var.vm_db_preemptible
+  }
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.develop_b.id
+    nat       = var.vm_db_nat
+  }
+
+  metadata = var.metadata
+}
+```
+
+Все неиспользуемые более перменные закомментируем в файле variables.tf.
+
+terraform plan:
+
+![terraform_homework2-task2 9](https://github.com/user-attachments/assets/ceb5e49f-52e6-4657-9ea6-8ce67607c075)
