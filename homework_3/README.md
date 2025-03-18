@@ -128,7 +128,7 @@ module "analytics_vm" {
 }
 ```
 
-Все ранее созданные сети, для домашней работы №2, я удалил, поэтому в этой домашней работе используются новые. Проверяем terraform plan, все выглядит рабочим, применяем terraform plan:
+Проверяем terraform plan, все выглядит рабочим, применяем terraform plan:
 
 ![terraform_homework3-task1 1](https://github.com/user-attachments/assets/8e20e1d4-76c8-4588-830c-a031c2d2bd4a)
 
