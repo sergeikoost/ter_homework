@@ -135,7 +135,8 @@ module "analytics_vm" {
 
 Создалось 2 вм:
 
-![terraform_homework3-task1 2](https://github.com/user-attachments/assets/123af03f-bd66-4ef1-b3af-7fb73d291c30)
+![terraform_homework3-task1 2](https://github.com/user-attachments/assets/4e7d432a-8f38-40a8-8fa0-71cb3dc3067a)
+
 
 
 Заходим по очереди на виртуалки с машины, на которой выполнялась работа и даем команду sudo nginx -t
