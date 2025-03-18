@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/7551139b-15d4-49b5-8e4e-8006e7c2f144)# Задача 1
+# Задача 1
 
 В прошлой домашней работе установил все необходимое для выполнения этой.
 
@@ -145,6 +145,11 @@ module "analytics_vm" {
 
 
 ![terraform_homework3-task1 3](https://github.com/user-attachments/assets/2c9e7a17-1df2-44d5-8513-0c1f98cf0d59)
+
+2-ая вм:
+
+![terraform_homework3-task1 3](https://github.com/user-attachments/assets/2c9e7a17-1df2-44d5-8513-0c1f98cf0d59)
+
 
 
 2-ая вм:
