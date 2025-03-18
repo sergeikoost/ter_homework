@@ -31,7 +31,7 @@ packages:
 
 variable "ssh_key" {
   type    = string
-  default = "ubuntu:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINJi2NOa0VHfHpjpfue1i/mlrbVpr898SDMajPes16gt root@ubuntulearn"
+  default = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPzPE5D2fUw+N2HRvttozFcURLdaxZ5SFz9EkxKDRUzS root@ubuntulearn"
 }
 variable "token" {
   type        = string
