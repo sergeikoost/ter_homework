@@ -146,11 +146,6 @@ module "analytics_vm" {
 
 ![terraform_homework3-task1 3](https://github.com/user-attachments/assets/2c9e7a17-1df2-44d5-8513-0c1f98cf0d59)
 
-2-ая вм:
-
-![terraform_homework3-task1 3](https://github.com/user-attachments/assets/2c9e7a17-1df2-44d5-8513-0c1f98cf0d59)
-
-
 
 2-ая вм:
 
