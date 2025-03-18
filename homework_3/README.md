@@ -150,3 +150,8 @@ module "analytics_vm" {
 2-ая вм:
 
 ![terraform_homework3-task1 4](https://github.com/user-attachments/assets/5b23e642-b986-475e-87e7-27785d2edda4)
+
+
+# Задача 2
+
+
