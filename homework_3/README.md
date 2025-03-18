@@ -1,4 +1,4 @@
-# Задача 1
+![image](https://github.com/user-attachments/assets/7551139b-15d4-49b5-8e4e-8006e7c2f144)# Задача 1
 
 В прошлой домашней работе установил все необходимое для выполнения этой.
 
@@ -138,3 +138,14 @@ module "analytics_vm" {
 ![terraform_homework3-task1 2](https://github.com/user-attachments/assets/123af03f-bd66-4ef1-b3af-7fb73d291c30)
 
 
+Заходим по очереди на виртуалки с машины, на которой выполнялась работа и даем команду sudo nginx -t
+
+1-ая вм:
+
+
+![terraform_homework3-task1 3](https://github.com/user-attachments/assets/2c9e7a17-1df2-44d5-8513-0c1f98cf0d59)
+
+
+2-ая вм:
+
+![terraform_homework3-task1 4](https://github.com/user-attachments/assets/5b23e642-b986-475e-87e7-27785d2edda4)
