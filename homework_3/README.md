@@ -266,4 +266,42 @@ terraform-docs markdown ./modules/vpc > ./modules/vpc/README.md
 
 ![terraform_homework3-task2 3](https://github.com/user-attachments/assets/24f77c92-f30f-47f8-86a2-6b8772d9b441)
 
+# Задание 3
 
+1. Выводим список ресурсов в стейте, terraform state list:
+
+![terraform_homework3-task3 1](https://github.com/user-attachments/assets/eeac1d5f-5c1f-4879-bf05-689ab0bf2991)
+
+
+2. Удаляем из стейта модуль vpc:
+
+![terraform_homework3-task3 2](https://github.com/user-attachments/assets/ac71bc61-4c18-4148-a039-31859060e7f9)
+
+3. Удаляем из стейта модуль vm:
+
+![terraform_homework3-task3 3](https://github.com/user-attachments/assets/a00f56c6-b099-4d0c-b981-de8c43da3923)
+
+4. Возвращаем:
+
+Первым делом вернем сети, предварительно узнав их ID в клауд консоли, команды:
+
+```
+terraform import module.vpc_dev.yandex_vpc_network.network enpml8es7vo280kqggia
+terraform import module.vpc_dev.yandex_vpc_subnet.subnet e9b2ri9ps4fa3ol1vhh6
+```
+
+Дальше уже по очереди вернем модуль vm в стейт для каждой нашей vm, id также берем из клауда:
+
+
+```
+terraform import module.marketing_vm.yandex_compute_instance.vm[0] fhmop8i2itijn1m3tke5
+terraform import module.analytics_vm.yandex_compute_instance.vm[0] fhmapje6diqkrbodsdhg
+```
+
+
+Вывод terraform plan:
+
+![terraform_homework3-task3 4](https://github.com/user-attachments/assets/62c6d393-e520-408e-98d6-c50eff709d87)
+
+
+Значимых изменений нет.
