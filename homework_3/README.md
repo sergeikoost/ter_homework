@@ -154,4 +154,116 @@ module "analytics_vm" {
 
 # Задача 2
 
+Создаем модуль vpc в отдельной директории modules/vpc/
+
+В нем делаю 4 файла, которые будут использоваться в этом модуле:
+
+main.tf - тут мы создадем ресурсы сети и подсети:
+
+```
+resource "yandex_vpc_network" "network" {
+  name = var.env_name
+}
+
+resource "yandex_vpc_subnet" "subnet" {
+  name           = "${var.env_name}-${var.zone}"
+  zone           = var.zone
+  network_id     = yandex_vpc_network.network.id
+  v4_cidr_blocks = [var.cidr]
+}
+```
+
+outputs.tf - тут определяем выходные значения для модуля:
+
+```
+output "network_id" {
+  value = yandex_vpc_network.network.id
+}
+
+output "subnet_id" {
+  value = yandex_vpc_subnet.subnet.id
+}
+
+output "subnet_info" {
+  value = yandex_vpc_subnet.subnet
+}
+```
+
+
+providers.tf - тут указываем терраформ провайдера: 
+
+```
+terraform {
+  required_providers {
+    yandex = {
+      source = "yandex-cloud/yandex"
+    }
+  }
+}
+```
+
+
+variables.tf - тут определяем входные переменные для модуля:
+
+```
+variable "env_name" {
+  type        = string
+  description = "Environment name (e.g., develop, stage, prod)"
+}
+
+variable "zone" {
+  type        = string
+  description = "Availability zone for the subnet"
+}
+
+variable "cidr" {
+  type        = string
+  description = "CIDR block for the subnet"
+}
+```
+
+
+Далее необходимо подключить этот модуль к основному проекту, сделаем это немного исправив файл main.tf в основном проекте:
+
+```
+# Создаем сеть и подсеть с помощью локального модуля vpc
+module "vpc_dev" {
+  source   = "./modules/vpc"  # Указываем путь к локальному модулю
+  env_name = "develop"        # Название среды
+  zone     = "ru-central1-a"  # Зона доступности
+  cidr     = "10.0.1.0/24"    # CIDR блок для подсети
+}
+```
+
+В файле outputs.tf добавим вывод информации о модуле vpc:
+
+```
+output "vpc_dev_info" {
+  value = module.vpc_dev.subnet_info
+}
+```
+
+
+Применяем конфигурацию terraform apply, проект собирается без проблем, прикладываю output:
+
+![terraform_homework3-task2 1](https://github.com/user-attachments/assets/c7a9f965-21b9-4ac0-801d-be0e97f37326)
+
+
+Устанавливаем terraform-docs и формируем документацию для нашего модуля vpc командой:
+
+
+```
+terraform-docs markdown ./modules/vpc > ./modules/vpc/README.md
+```
+
+
+Создается документация, прикладываю скрин, но если нужно текстом могу и текстом:
+
+![terraform_homework3-task2 2](https://github.com/user-attachments/assets/689bd157-16be-4dd1-a15e-b0b45dbe1bf4)
+
+
+Заходим в консоль терраформа и просим показать вывод информации о модуле, конкретнее о subnet, информация корректная:
+
+![terraform_homework3-task2 3](https://github.com/user-attachments/assets/24f77c92-f30f-47f8-86a2-6b8772d9b441)
+
 
