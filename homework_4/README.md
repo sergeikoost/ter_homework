@@ -18,3 +18,8 @@
 
 ![terraform_homework4-task1 1](https://github.com/user-attachments/assets/8f555cda-ac67-459e-ad74-71258a4f5ef7)
 ![terraform_homework4-task1 2](https://github.com/user-attachments/assets/210a065a-49ff-41d8-a12c-13b6522db5a1)
+
+
+# Задача 2
+
+
