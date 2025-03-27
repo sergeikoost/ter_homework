@@ -192,5 +192,5 @@ resource "yandex_compute_instance" "storage" {
 ![terraform_homework4-task3 3](https://github.com/user-attachments/assets/7a9c35f0-059d-4afe-af87-20970b4838f8)
 
 
-#Задача 4
+# Задача 4
 
