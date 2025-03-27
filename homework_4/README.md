@@ -131,3 +131,125 @@ variable "each_vm" {
 
 
 Все созданные ВМ будут использовать указанную подсеть, иметь публичный IP, иметь доступ по SSH с моим ключом и подчиняться правилам, которые описаны в файле security.tf
+
+
+# Задача 3
+
+Создаем файл disk_vm.tf:
+
+```
+resource "yandex_compute_disk" "additional_disks" {
+  count = 3 #Создаем 3 одинаковых диска
+  name  = "disk-${count.index + 1}" #Присваиваем имена дискам
+  size  = 1 # Задаем размер дисков
+  zone  = var.default_zone
+}
+
+# Создаем одиночную ВМ "storage" с подключением дисков
+resource "yandex_compute_instance" "storage" {
+  name = "storage"
+
+  resources {
+    cores  = 2
+    memory = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd8vmcue7aajpmeo39kk" # Ubuntu 20.04 LTS
+      size     = 10
+    }
+  }
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.develop.id
+    nat       = true
+    security_group_ids = [yandex_vpc_security_group.example.id]
+  }
+
+  metadata = {
+    ssh-keys = "ubuntu:${file("~/.ssh/id_ed25519.pub")}"
+  }
+
+  # Динамическое подключение дополнительных дисков
+  dynamic "secondary_disk" {             
+    for_each = { for idx, disk in yandex_compute_disk.additional_disks : idx => disk.id }#Динамический блок создает секцию secondary_disk для каждого диска
+    content {
+      disk_id = secondary_disk.value #disk_id берется из созданных дисков (yandex_compute_disk.additional_disks.*.id)
+    }
+  }
+}
+
+```
+Итого создалось 5 вм с указанными параметрами, пример создаваемой вм:
+
+```
+# yandex_compute_instance.web[0] will be created
+  + resource "yandex_compute_instance" "web" {
+      + created_at                = (known after apply)
+      + folder_id                 = (known after apply)
+      + fqdn                      = (known after apply)
+      + gpu_cluster_id            = (known after apply)
+      + hardware_generation       = (known after apply)
+      + hostname                  = (known after apply)
+      + id                        = (known after apply)
+      + maintenance_grace_period  = (known after apply)
+      + maintenance_policy        = (known after apply)
+      + metadata                  = {
+          + "ssh-keys" = <<-EOT
+                ubuntu:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPzPE5D2fUw+N2HRvttozFcURLdaxZ5SFz9EkxKDRUzS root@ubuntulearn
+            EOT
+        }
+      + name                      = "web-1"
+      + network_acceleration_type = "standard"
+      + platform_id               = "standard-v1"
+      + service_account_id        = (known after apply)
+      + status                    = (known after apply)
+      + zone                      = (known after apply)
+
+      + boot_disk {
+          + auto_delete = true
+          + device_name = (known after apply)
+          + disk_id     = (known after apply)
+          + mode        = (known after apply)
+
+          + initialize_params {
+              + block_size  = (known after apply)
+              + description = (known after apply)
+              + image_id    = "fd8vmcue7aajpmeo39kk"
+              + name        = (known after apply)
+              + size        = 10
+              + snapshot_id = (known after apply)
+              + type        = "network-hdd"
+            }
+        }
+
+      + metadata_options (known after apply)
+
+      + network_interface {
+          + index              = (known after apply)
+          + ip_address         = (known after apply)
+          + ipv4               = true
+          + ipv6               = (known after apply)
+          + ipv6_address       = (known after apply)
+          + mac_address        = (known after apply)
+          + nat                = true
+          + nat_ip_address     = (known after apply)
+          + nat_ip_version     = (known after apply)
+          + security_group_ids = (known after apply)
+          + subnet_id          = (known after apply)
+        }
+
+      + placement_policy (known after apply)
+
+      + resources {
+          + core_fraction = 100
+          + cores         = 2
+          + memory        = 2
+        }
+
+      + scheduling_policy (known after apply)
+    }
+```
+
+![terraform_homework4-task3 1](https://github.com/user-attachments/assets/7132cb99-aa23-4901-8ec3-fa594116663f)
