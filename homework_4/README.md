@@ -181,76 +181,7 @@ resource "yandex_compute_instance" "storage" {
 }
 
 ```
-Итого создалось 5 вм с указанными параметрами, пример создаваемой вм:
-
-```
-# yandex_compute_instance.web[0] will be created
-  + resource "yandex_compute_instance" "web" {
-      + created_at                = (known after apply)
-      + folder_id                 = (known after apply)
-      + fqdn                      = (known after apply)
-      + gpu_cluster_id            = (known after apply)
-      + hardware_generation       = (known after apply)
-      + hostname                  = (known after apply)
-      + id                        = (known after apply)
-      + maintenance_grace_period  = (known after apply)
-      + maintenance_policy        = (known after apply)
-      + metadata                  = {
-          + "ssh-keys" = <<-EOT
-                ubuntu:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPzPE5D2fUw+N2HRvttozFcURLdaxZ5SFz9EkxKDRUzS root@ubuntulearn
-            EOT
-        }
-      + name                      = "web-1"
-      + network_acceleration_type = "standard"
-      + platform_id               = "standard-v1"
-      + service_account_id        = (known after apply)
-      + status                    = (known after apply)
-      + zone                      = (known after apply)
-
-      + boot_disk {
-          + auto_delete = true
-          + device_name = (known after apply)
-          + disk_id     = (known after apply)
-          + mode        = (known after apply)
-
-          + initialize_params {
-              + block_size  = (known after apply)
-              + description = (known after apply)
-              + image_id    = "fd8vmcue7aajpmeo39kk"
-              + name        = (known after apply)
-              + size        = 10
-              + snapshot_id = (known after apply)
-              + type        = "network-hdd"
-            }
-        }
-
-      + metadata_options (known after apply)
-
-      + network_interface {
-          + index              = (known after apply)
-          + ip_address         = (known after apply)
-          + ipv4               = true
-          + ipv6               = (known after apply)
-          + ipv6_address       = (known after apply)
-          + mac_address        = (known after apply)
-          + nat                = true
-          + nat_ip_address     = (known after apply)
-          + nat_ip_version     = (known after apply)
-          + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
-        }
-
-      + placement_policy (known after apply)
-
-      + resources {
-          + core_fraction = 100
-          + cores         = 2
-          + memory        = 2
-        }
-
-      + scheduling_policy (known after apply)
-    }
-```
+Итого создалось 5 вм с указанными ранее параметрами, 4 из прошлой задачи и 1 новая, storage
 
 ![terraform_homework4-task3 1](https://github.com/user-attachments/assets/7132cb99-aa23-4901-8ec3-fa594116663f)
 
