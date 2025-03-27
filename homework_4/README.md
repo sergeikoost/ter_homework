@@ -253,3 +253,11 @@ resource "yandex_compute_instance" "storage" {
 ```
 
 ![terraform_homework4-task3 1](https://github.com/user-attachments/assets/7132cb99-aa23-4901-8ec3-fa594116663f)
+
+
+
+Поскольку нас интересует именно storage вм и создание 3-ех дисков на ней прикладываю скрин с этой вм:
+
+![terraform_homework4-task3 3](https://github.com/user-attachments/assets/7a9c35f0-059d-4afe-af87-20970b4838f8)
+
+
